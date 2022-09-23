@@ -9,15 +9,6 @@ const pusher = new Pusher({
     useTLS: true
 })
 
-const user = await prisma.user.create({
-    data:{
-        ...body,
-    }
-})
-
-pusher.trigger("my-chat","my-list-contacts",{
-    message: "Call to update list contacts"
-})
 const prisma = new PrismaClient()
 
 export const findAll = async (_req, res) => {
@@ -64,6 +55,10 @@ export const store = async (req, res) => {
                 ...body,
             }
         });
+
+        pusher.trigger("my-chat","my-list-contacts",{
+            message: "Call to update list contacts"
+        })
 
         res.status(201).json({
             ok:true,
